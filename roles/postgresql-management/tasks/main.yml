@@ -1,0 +1,49 @@
+- name: "Create app database"
+  postgresql_db:
+    state: present
+    name: "{{ db_name }}"
+- name: "Create db user"
+  postgresql_user:
+    state: present
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+- name: "Grant db user access to app db"
+  postgresql_privs:
+    type: database
+    database: "{{ db_name }}"
+    roles: "{{ db_user }}"
+    grant_option: no
+    privs: all
+- name: "Get path hba"
+  shell: psql -t  -c "show hba_file;" | awk '{print $1}'
+  register: hba_file
+- name: "Debug"
+  debug:
+    var: hba_file.stdout_lines
+- name: "Debug"
+  debug:
+    var: "{{ item }}"
+  with_items: hba_file.stdout_lines 
+- name: "Allow md5 connection for the db user"
+  postgresql_pg_hba:
+    dest: "{{ item }}"
+    #dest: "{{ hba_file.stdout_lines[0] }}"
+    #dest: /etc/postgresql/14/main/pg_hba.conf
+    contype: host
+    databases: all
+    source: 10.143.2.0/24
+    method: trust
+    users: "{{ db_user }}"
+    create: true
+  notify: restart postgres
+  loop: "{{ hba_file.stdout_lines }}"
+  #with_items:
+  #  - hba_file.stdout_lines
+- name: Reload service pg
+  ansible.builtin.service:
+    name: postgresql@14-main
+    state: reloaded
+  become_user: root
+- name: "Init DB zabbix"
+  shell: "zcat /usr/share/doc/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix -h 10.143.2.56"
+  become_user: root

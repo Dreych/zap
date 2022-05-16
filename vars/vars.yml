@@ -1,0 +1,8 @@
+---
+db_user: zabbix
+db_password: zabbix
+db_name: zabbix
+ip_db: 10.143.2.56
+zabbix_name: new_zabbix.testlocal
+timezone_os: Europe/Moscow
+pgdata: /data

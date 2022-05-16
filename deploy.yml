@@ -1,0 +1,11 @@
+---
+- hosts: '{{ targets }}'
+  gather_facts: false
+  become: false
+  vars_files:
+    - vars/vars.yml
+  roles:
+     - { role: zabbix-server, become: yes, tags: 'zabbix-server' }
+     - { role: postgresql-install, become: yes, tags: 'postgresql-install' }
+     - { role: postgresql-management, become: yes, become_user: postgres, tags: 'postgresql-management' }
+     - { role: setting-os, become: yes, tags: 'setting-os' }
