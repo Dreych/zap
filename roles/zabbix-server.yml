@@ -1,4 +1,0 @@
-- name: zabbix-server
-  become: true
-  roles:
-   - zabbix-server/add-repo

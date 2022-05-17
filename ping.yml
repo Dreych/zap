@@ -1,5 +1,0 @@
-- name: pingall
-  hosts: all
-  become: yes
-  tasks:
-    - ping:
