@@ -3,6 +3,47 @@
 - name: Set timezone
   timezone:
     name: "{{ timezone_os }}"
+# Команды на хосте 
+- block:
+    - name: Enable ufw 
+      ansible.builtin.shell: ufw app list 
+#      ansible.builtin.shell: ufw enable
+    - name: Allow all access to tcp port 80
+      community.general.ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+    - name: Allow all access to tcp port 443
+      community.general.ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+    - name: Allow all access to tcp port "{{ allow_ports }}"
+      community.general.ufw:
+        rule: allow
+        port: '"{{ item }}"'
+        proto: tcp
+      loop: "{{ allow_ports }}"
+      #loop:
+#        - "{{ lookup('vars','allow_ports',wantlist=True) }}"
+      tags:
+        - now
+    - name: Allow all access to tcp port "{{ allow_ports }}"
+      debug:
+        msg: "{{ item  }}"
+      loop: "{{ allow_ports }}"
+      tags:
+        - test
+    - name: Allow OpenSSH
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+    - name: Allow everything and enable UFW
+      community.general.ufw:
+        state: enabled
+        policy: allow
+  tags:
+    - command
 # Установка ntp
 - block:
     - name: Install ntp package
