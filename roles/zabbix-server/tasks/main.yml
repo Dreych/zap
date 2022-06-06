@@ -15,9 +15,15 @@
     - ansible_facts['distribution'] == "CentOS"
 
 
+- name: Copy Deb
+  copy:
+    src: roles/zabbix-server/files/zabbix-release_6.0-1+ubuntu20.04_all.deb
+    dest: /tmp/
 - name: Add zabbix repository if Ubuntu
   apt:
-    deb: https://repo.zabbix.com/zabbix/{{ zabbix_version }}/{{ ansible_distribution | lower }}/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution | lower }}{{ ansible_distribution_version }}_all.deb
+#    deb: https://repo.zabbix.com/zabbix/{{ zabbix_version }}/{{ ansible_distribution | lower }}/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution | lower }}{{ ansible_distribution_version }}_all.deb
+#    deb:  roles/zabbix-server/files/zabbix-release_6.0-1+ubuntu20.04_all.deb
+    deb:  /tmp/zabbix-release_6.0-1+ubuntu20.04_all.deb
     update_cache: yes
   when:
     - ansible_facts['distribution'] == "Ubuntu"

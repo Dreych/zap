@@ -1,0 +1,45 @@
+---
+#- name: Pull default Docker image
+#  community.docker.docker_image:
+#    name: "{{ default_container_image }}"
+#    source: pull
+#
+#- name: Create default containers
+#  community.docker.docker_container:
+#    name: "{{ default_container_name }}{{ item }}"
+#    image: "{{ default_container_image }}"
+#    command: "{{ default_container_command }}"
+#    state: present
+#  with_sequence: count={{ container_count }}
+
+- name: Create directory
+  ansible.builtin.file:
+    path: /opt/zabbix-docker
+    state: directory
+    mode: '0755'
+
+- name: Copy Deb
+  copy:
+    src: ./
+    dest: /opt/zabbix-docker
+    owner: root
+    mode: '0644'
+    directory_mode: yes
+
+- name: Get container
+  block:
+    - name: Print a message
+      ansible.builtin.debug:
+        msg: 'I execute normally'
+
+    - name: Force a failure
+      ansible.builtin.command: /bin/true
+
+    - name: Never print this
+      ansible.builtin.debug:
+        msg: 'I never execute, due to the above task failing, :-('
+  rescue:
+    - name: Print when errors
+      ansible.builtin.debug:
+        msg: 'I caught an error, can do stuff here to fix it, :-)'
+

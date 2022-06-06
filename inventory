@@ -4,12 +4,19 @@ all:
   children:
     zabbix:
       hosts:
-        10.143.2.56:
+        #10.143.2.56:
+        #  ansible_user: a_simkin
         10.143.2.57:
+          ansible_user: a_simkin
         10.143.2.58:
           ansible_user: a_simkin
         10.143.2.59:
           ansible_user: a_simkin
     db:
       hosts:
-        10.143.2.56:
+        10.143.2.57:
+          ansible_user: a_simkin
+        10.143.2.58:
+          ansible_user: a_simkin
+        10.143.2.59:
+          ansible_user: a_simkin
