@@ -1,4 +1,3 @@
----
 #- name: Pull default Docker image
 #  community.docker.docker_image:
 #    name: "{{ default_container_image }}"
@@ -11,6 +10,12 @@
 #    command: "{{ default_container_command }}"
 #    state: present
 #  with_sequence: count={{ container_count }}
+
+---
+- name: Collect only facts returned by facter
+  setup:
+    gather_subset:
+      - 'all'
 
 - name: Create directory
   ansible.builtin.file:
@@ -25,6 +30,11 @@
     owner: root
     mode: '0644'
     directory_mode: yes
+
+- name: Copy conf
+  template:
+    src: ../templates/.env_srv.j2
+    dest: /opt/zabbix-docker/env_vars/.env_srv
 
 - name: Get container
   block:
@@ -43,3 +53,5 @@
       ansible.builtin.debug:
         msg: 'I caught an error, can do stuff here to fix it, :-)'
 
+- name: Run docker-compose
+  shell: "cd /opt/zabbix-docker; docker-compose up -d"

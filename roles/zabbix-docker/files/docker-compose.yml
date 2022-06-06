@@ -211,10 +211,10 @@ services:
    resources:
     limits:
       cpus: '0.5'
-      memory: 512M
+      memory: 256M
     reservations:
       cpus: '0.25'
-      memory: 256M
+      memory: 128M
   env_file:
    - ./env_vars/.env_java
   networks:
@@ -267,10 +267,10 @@ services:
    resources:
     limits:
       cpus: '0.5'
-      memory: 512M
+      memory: 256M
     reservations:
       cpus: '0.25'
-      memory: 256M
+      memory: 128M
   env_file:
    - ./env_vars/.env_web_service
   networks:
