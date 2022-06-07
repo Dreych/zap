@@ -1,0 +1,10 @@
+---
+- hosts: '{{ targets }}'
+  gather_facts: false
+  become: false
+  vars_files:
+    - vars/vars.yml
+  roles:
+     - { role: docker-zabbix, become: yes, tags: 'docker-install' }
+     - { role: zabbix-docker, become: yes, tags: 'zabbix-docker' }
+     - { role: setting-os, become: yes, tags: 'setting-os' }
