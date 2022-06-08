@@ -23,7 +23,7 @@
     state: directory
     mode: '0755'
 
-- name: Copy Deb
+- name: Copy all
   copy:
     src: ./
     dest: /opt/zabbix-docker
@@ -35,6 +35,22 @@
   template:
     src: ../templates/.env_srv.j2
     dest: /opt/zabbix-docker/env_vars/.env_srv
+- name: Copy conf
+  template:
+    src: ../templates/.env_db_pgsql.j2
+    dest: /opt/zabbix-docker/env_vars/.env_db_pgsql
+- name: Copy conf
+  template:
+    src: ../templates/.env_web.j2
+    dest: /opt/zabbix-docker/env_vars/.env_web
+- name: Copy conf
+  template:
+    src: ../templates/.env_web_service.j2
+    dest: /opt/zabbix-docker/env_vars/.env_web_service
+- name: Copy conf
+  template:
+    src: ../templates/docker-compose.yml.j2
+    dest: /opt/zabbix-docker/docker-compose.yml
 
 - name: Get container
   block:
@@ -55,3 +71,8 @@
 
 - name: Run docker-compose
   shell: "cd /opt/zabbix-docker; docker-compose up -d"
+
+- name: Restart all container
+  shell: "cd /opt/zabbix-docker; docker-compose restart"
+  tags:
+    - restartdocker
