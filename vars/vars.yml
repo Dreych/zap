@@ -2,8 +2,9 @@
 db_user: zabbix
 db_password: zabbix
 db_name: zabbix
-ip_db: 10.143.2.56
-zabbix_name: new_zabbix.testlocal
+db_ip: 10.143.2.56
+db_port: 5432
+zabbix_name: new_zabbix.local
 timezone_os: Europe/Moscow
 pgdata: /data
 zabbix_version: 6.0

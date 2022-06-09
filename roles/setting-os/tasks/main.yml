@@ -3,6 +3,8 @@
 - name: Set timezone
   timezone:
     name: "{{ timezone_os }}"
+  tags:
+    - time
 # Команды на хосте 
 - block:
     - name: Enable ufw 
